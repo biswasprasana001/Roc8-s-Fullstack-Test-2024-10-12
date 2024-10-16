@@ -5,12 +5,16 @@ const bodyParser = require("body-parser");
 const csv = require("csv-parser");
 const fs = require("fs");
 const moment = require("moment");
+const authMiddleware = require("./middleware/auth");
 
 const app = express();
 const PORT = 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+const authRoutes = require("./routes/auth");
+app.use("/auth", authRoutes);
 
 // Sample dataset loading (or load dynamically)
 let dataset = []; // This will store the parsed data
@@ -30,15 +34,19 @@ fs.createReadStream("./data.csv") // Reading the CSV file
   });
 
 // Get total time spent on features based on filters
-app.post("/api/total-time", (req, res) => {
+app.post("/api/total-time", authMiddleware, (req, res) => {
   const { startDate, endDate, age, gender } = req.body;
-  const filteredData = dataset.filter((d) => {
-    const date = new Date(d.Day);
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  const filteredData = dataset.filter((d, index) => {
+    // Convert the CSV date from 'DD/MM/YYYY' to a proper Date object
+    const csvDate = moment(d.Day, "DD/MM/YYYY").toDate();
+    // Apply the filters for date, age, and gender
+    // console.log(csvDate, start, end, age, gender);
+    // console.log(++count);
     return (
-      date >= new Date(startDate) &&
-      date <= new Date(endDate) &&
-      (age === "all" || d.Age === age) &&
-      (gender === "all" || d.Gender === gender)
+      csvDate >= start && csvDate <= end && d.Age == age && d.Gender == gender
     );
   });
 
@@ -53,7 +61,7 @@ app.post("/api/total-time", (req, res) => {
 });
 
 // Get time trend data for a specific feature
-app.post("/api/time-trend", (req, res) => {
+app.post("/api/time-trend", authMiddleware, (req, res) => {
   const { startDate, endDate, age, gender, feature } = req.body;
   console.log(req.body);
   // Convert startDate and endDate to match the format in CSV
