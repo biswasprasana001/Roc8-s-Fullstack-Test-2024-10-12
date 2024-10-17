@@ -48,6 +48,19 @@ const App = () => {
   const [lineDataLabels, setLineDataLabels] = useState([]);
   const [lineDataDatasets, setLineDataDatasets] = useState([]);
   const [selectedFeature, setSelectedFeature] = useState("A");
+  const [shareableURL, setShareableURL] = useState("");
+
+  const handleGenerateURL = () => {
+    const url = constructShareableURL();
+    setShareableURL(url);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard
+      .writeText(shareableURL)
+      .then(() => alert("URL copied to clipboard!"))
+      .catch((err) => console.error("Failed to copy URL", err));
+  };
 
   // Helper to store preferences in cookies
   const savePreferencesToCookies = () => {
@@ -159,99 +172,142 @@ const App = () => {
     setGender("Male");
   };
 
+  const constructShareableURL = () => {
+    const baseUrl = `${window.location.origin}/share`;
+
+    // Create query parameters based on current filters
+    const params = new URLSearchParams({
+      start: startDate.toISOString().split("T")[0], // Format to YYYY-MM-DD
+      end: endDate.toISOString().split("T")[0],
+      age,
+      gender,
+      feature: selectedFeature,
+    });
+
+    // Combine base URL with query parameters
+    const shareableURL = `${baseUrl}?${params.toString()}`;
+
+    return shareableURL;
+  };
+
   return (
-    <div className="container">
-      <h1>Feature Analytics</h1>
+    <>
+      <div className="container">
+        <h1>Feature Analytics</h1>
 
-      <div className="filters">
-        <FilterItem label="Start Date">
-          <DatePicker selected={startDate} onChange={setStartDate} />
-        </FilterItem>
+        <div className="filters">
+          <FilterItem label="Start Date">
+            <DatePicker selected={startDate} onChange={setStartDate} />
+          </FilterItem>
 
-        <FilterItem label="End Date">
-          <DatePicker selected={endDate} onChange={setEndDate} />
-        </FilterItem>
+          <FilterItem label="End Date">
+            <DatePicker selected={endDate} onChange={setEndDate} />
+          </FilterItem>
 
-        <FilterItem label="Age">
-          <select value={age} onChange={(e) => setAge(e.target.value)}>
-            <option value="all">All</option>
-            <option value="15-25">15-25</option>
-            <option value=">25">25</option>
-          </select>
-        </FilterItem>
+          <FilterItem label="Age">
+            <select value={age} onChange={(e) => setAge(e.target.value)}>
+              <option value="all">All</option>
+              <option value="15-25">15-25</option>
+              <option value=">25">25</option>
+            </select>
+          </FilterItem>
 
-        <FilterItem label="Gender">
-          <select value={gender} onChange={(e) => setGender(e.target.value)}>
-            <option value="all">All</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </FilterItem>
-      </div>
+          <FilterItem label="Gender">
+            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+              <option value="all">All</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </FilterItem>
+        </div>
 
-      <button className="update-btn" onClick={fetchTotalTime}>
-        Update Charts
-      </button>
+        <button className="update-btn" onClick={fetchTotalTime}>
+          Update Charts
+        </button>
 
-      <button className="reset-btn" onClick={resetPreferences}>
-        Reset Preferences
-      </button>
+        <button className="reset-btn" onClick={resetPreferences}>
+          Reset Preferences
+        </button>
 
-      <ChartContainer>
-        {barData && (
-          <Bar
-            data={barData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              onClick: (evt, elements) => handleFeatureClick(elements),
-              plugins: {
-                title: { display: true, text: "Total Time Spent on Features" },
-              },
-              scales: {
-                x: { ticks: { font: { size: 12 } } },
-              },
-            }}
-          />
-        )}
-
-        {selectedFeature && lineDataDatasets.length > 0 ? (
-          <Line
-            data={{
-              labels: lineDataLabels,
-              datasets: [
-                {
-                  label: `Time Trend for Feature ${selectedFeature}`,
-                  data: lineDataDatasets,
-                  borderColor: "rgba(153, 102, 255, 1)",
-                  backgroundColor: "rgba(153, 102, 255, 0.2)",
-                  fill: true,
-                },
-              ],
-            }}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                zoom: {
-                  zoom: {
-                    wheel: { enabled: true },
-                    pinch: { enabled: true },
-                    mode: "x",
+        <ChartContainer>
+          {barData && (
+            <Bar
+              data={barData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                onClick: (evt, elements) => handleFeatureClick(elements),
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Total Time Spent on Features",
                   },
-                  pan: { enabled: true, mode: "x" },
                 },
-              },
-              scales: {
-                x: { type: "time", time: { unit: "day" } },
-              },
-            }}
-          />
-        ) : (
-          <p>No data available to display</p>
+                scales: {
+                  x: { ticks: { font: { size: 12 } } },
+                },
+              }}
+            />
+          )}
+
+          {selectedFeature && lineDataDatasets.length > 0 ? (
+            <Line
+              data={{
+                labels: lineDataLabels,
+                datasets: [
+                  {
+                    label: `Time Trend for Feature ${selectedFeature}`,
+                    data: lineDataDatasets,
+                    borderColor: "rgba(153, 102, 255, 1)",
+                    backgroundColor: "rgba(153, 102, 255, 0.2)",
+                    fill: true,
+                  },
+                ],
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  zoom: {
+                    zoom: {
+                      wheel: { enabled: true },
+                      pinch: { enabled: true },
+                      mode: "x",
+                    },
+                    pan: { enabled: true, mode: "x" },
+                  },
+                },
+                scales: {
+                  x: { type: "time", time: { unit: "day" } },
+                },
+              }}
+            />
+          ) : (
+            <p>No data available to display</p>
+          )}
+        </ChartContainer>
+      </div>
+      <div>
+        <h2>Feature Analytics</h2>
+
+        {/* Button to generate the shareable URL */}
+        <button onClick={handleGenerateURL}>Generate Shareable URL</button>
+
+        {shareableURL && (
+          <div>
+            <p>
+              Shareable URL:{" "}
+              <a href={shareableURL} target="_blank" rel="noopener noreferrer">
+                {shareableURL}
+              </a>
+            </p>
+
+            {/* Button to copy the URL to clipboard */}
+            <button onClick={copyToClipboard}>Copy URL to Clipboard</button>
+          </div>
         )}
-      </ChartContainer>
-    </div>
+      </div>
+    </>
   );
 };
 

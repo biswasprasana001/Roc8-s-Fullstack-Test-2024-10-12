@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email App</title>
+    <script src="./email-client.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Email List</h1>
+        </header>
+
+        <div class="email-view">
+            <!-- Left side - Email List (Master) -->
+            <div class="email-list">
+                <ul id="emailList"></ul>
+                <div class="pagination-controls">
+                    <button id="prevPage" disabled>Previous</button>
+                    <span id="pageInfo"></span>
+                    <button id="nextPage">Next</button>
+                </div>
+            </div>
+
+            <!-- Right side - Email Details (Slave) -->
+            <div class="email-body" id="emailBody">
+                <h2 id="emailSubject">Select an email</h2>
+                <p id="emailContent"></p>
+                <div id="emailDateTime"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
