@@ -18,23 +18,17 @@ header {
   background-color: #4caf50;
   color: white;
   padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.filter-controls button {
-  margin-left: 10px;
-  padding: 5px;
+  text-align: center;
 }
 
 .email-view {
   display: flex;
   flex: 1;
+  overflow: hidden;
 }
 
 .email-list {
-  width: 30%;
+  width: 40%;
   border-right: 1px solid #ccc;
   padding: 10px;
   overflow-y: auto;
@@ -45,31 +39,48 @@ header {
 }
 
 .email-list li {
+  display: flex;
+  align-items: center;
   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #ddd;
 }
 
-.email-list li.read {
-  color: gray;
-}
-
-.email-list li.unread {
+.email-list li .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  font-size: 20px;
   font-weight: bold;
-  color: black;
 }
 
-.email-list li.favorite {
-  color: gold;
+.email-list li .email-info {
+  flex: 1;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
 
 .email-body {
-  width: 70%;
+  width: 60%;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
 }
 
 .email-body h2 {
   margin-bottom: 20px;
+}
+
+.email-body #emailDateTime {
+  margin-top: 10px;
+  color: gray;
+  font-size: 12px;
 }

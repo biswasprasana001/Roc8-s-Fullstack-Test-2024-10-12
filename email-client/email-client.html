@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email App</title>
-    <script src="./email-client.js"></script>
 </head>
 
 <body>
@@ -13,6 +12,17 @@
         <header>
             <h1>Email List</h1>
         </header>
+
+        <!-- Filter Dropdown -->
+        <div class="filter-section">
+            <label for="filterEmails">Filter Emails: </label>
+            <select id="filterEmails">
+                <option value="all">All</option>
+                <option value="favorites">Favorites</option>
+                <option value="read">Read</option>
+                <option value="unread">Unread</option>
+            </select>
+        </div>
 
         <div class="email-view">
             <!-- Left side - Email List (Master) -->
@@ -30,11 +40,12 @@
                 <h2 id="emailSubject">Select an email</h2>
                 <p id="emailContent"></p>
                 <div id="emailDateTime"></div>
+                <button id="markFavorite" style="display:none;">Mark as Favorite</button>
             </div>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="./email-client.js"></script>
 </body>
 
 </html>
