@@ -9,78 +9,109 @@ body {
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+  margin: 20px;
+  border: 2px solid red;
 }
 
-header {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  text-align: center;
-}
-
-.email-view {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
-.email-list {
-  width: 40%;
-  border-right: 1px solid #ccc;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.email-list ul {
-  list-style: none;
-}
-
-.email-list li {
+.filter-section {
+  border: 2px solid green;
   display: flex;
   align-items: center;
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
-}
-
-.email-list li .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #4caf50;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-  font-size: 20px;
+  color: #636363;
   font-weight: bold;
 }
 
-.email-list li .email-info {
-  flex: 1;
-}
-
-.pagination-controls {
+#filterEmails {
+  border: 2px solid blue;
   display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+  flex-wrap: wrap;
+  margin-left: 10px;
 }
 
-.email-body {
-  width: 60%;
-  padding: 20px;
+#filterEmails button {
+  border: 1px solid #E1E4EA;
+  margin: 2px 5px;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: white;
+  font-weight: bold;
+  color: #636363;
 }
 
-.email-body h2 {
-  margin-bottom: 20px;
+#filterEmails button:hover {
+  background-color: #f2f2f2;
 }
 
-.email-body #emailDateTime {
-  margin-top: 10px;
-  color: gray;
-  font-size: 12px;
+.email-view {
+  border: 2px solid blue;
+}
+
+.email-list {
+  border: 2px solid red;
+  margin-top: 15px;
+}
+
+#emailList {
+  border: 2px solid blue;
+}
+
+.favorite {
+  background-color: #f2f2f2;
+}
+
+.email-item {
+  list-style: none;
+  border: 2px solid green;
+  display: flex;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.email-item:hover {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.avatar {
+  border: 2px solid red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 20px; 
+  background-color: #E54065;
+  color: white;
+}
+
+.email-info {
+  border: 2px solid blue;
+  margin: 5px;
+}
+
+.email-info strong {
+  border: 2px solid red;
+  color: #636363;
+}
+
+.email-info p {
+  margin: 5px 0;
+  border: 2px solid blue;
+  color: #636363;
+}
+
+
+.email-info small {
+  border: 2px solid blue;
+  color: #636363;
+}
+
+#favorite-text {
+  margin-left: 50px;
+  color: #E54065;
+  font-weight: bold;
 }

@@ -5,23 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email App</title>
+    <link rel="stylesheet" href="email-client.css">
 </head>
 
 <body>
     <div class="container">
-        <header>
-            <h1>Email List</h1>
-        </header>
 
         <!-- Filter Dropdown -->
         <div class="filter-section">
             <label for="filterEmails">Filter Emails: </label>
-            <select id="filterEmails">
-                <option value="all">All</option>
-                <option value="favorites">Favorites</option>
-                <option value="read">Read</option>
-                <option value="unread">Unread</option>
-            </select>
+            <div id="filterEmails">
+                <button value="all">All</button>
+                <button value="favorites">Favorites</button>
+                <button value="read">Read</button>
+                <button value="unread">Unread</button>
+            </div>
         </div>
 
         <div class="email-view">

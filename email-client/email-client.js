@@ -25,9 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Filter change
-  document.getElementById("filterEmails").addEventListener("change", (e) => {
-    filter = e.target.value;
-    renderEmailList();
+  document.querySelectorAll("#filterEmails button").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      filter = e.target.value;
+      renderEmailList();
+    });
   });
 });
 
@@ -67,9 +69,11 @@ function renderEmailList() {
     const emailInfo = document.createElement("div");
     emailInfo.classList.add("email-info");
     emailInfo.innerHTML = `
-      <strong>${email.subject}</strong>
+      <p>From: <strong>${email.from.name} ${email.from.email}</strong></p>
+      <p>Subject: <strong>${email.subject}</strong></p>
       <p>${email.short_description}</p>
       <small>${formatDateTime(email.date)}</small>
+      <small id="favorite-text">${favoriteEmails.has(email.id) ? "Favorite" : ""}</small>
     `;
 
     li.appendChild(avatar);
