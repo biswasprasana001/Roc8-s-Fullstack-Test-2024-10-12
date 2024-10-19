@@ -9,39 +9,46 @@
 </head>
 
 <body>
-    <div class="container">
+    <main class="container">
 
         <!-- Filter Dropdown -->
-        <div class="filter-section">
+        <section class="filter-section">
             <label for="filterEmails">Filter Emails: </label>
-            <div id="filterEmails">
+            <nav id="filterEmails">
                 <button value="all">All</button>
                 <button value="favorites">Favorites</button>
                 <button value="read">Read</button>
                 <button value="unread">Unread</button>
-            </div>
-        </div>
+            </nav>
+        </section>
 
-        <div class="email-view">
+        <section class="email-view">
             <!-- Left side - Email List (Master) -->
-            <div class="email-list">
+            <aside class="email-list">
                 <ul id="emailList"></ul>
-                <div class="pagination-controls">
+                <nav class="pagination-controls">
                     <button id="prevPage" disabled>Previous</button>
                     <span id="pageInfo"></span>
                     <button id="nextPage">Next</button>
-                </div>
-            </div>
+                </nav>
+            </aside>
 
             <!-- Right side - Email Details (Slave) -->
-            <div class="email-body" id="emailBody">
-                <h2 id="emailSubject">Select an email</h2>
-                <p id="emailContent"></p>
-                <div id="emailDateTime"></div>
-                <button id="markFavorite" style="display:none;">Mark as Favorite</button>
-            </div>
-        </div>
-    </div>
+            <article class="email-details">
+                <header class="email-header">
+                    <div id="email-avatar"></div>
+                </header>
+                <section class="email-body" id="emailBody">
+                    <header class="email-subject">
+                        <h2 id="emailSubject"></h2>
+                        <button id="markFavorite" style="display:none;">Mark as Favorite</button>
+                    </header>
+                    <time id="emailDateTime"></time>
+                    <p id="emailContent"></p>
+                </section>
+            </article>
+        </section>
+    </main>
 
     <script src="./email-client.js"></script>
 </body>

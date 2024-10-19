@@ -5,9 +5,12 @@ let emailsData = []; // Store all emails fetched
 let favoriteEmails = new Set(); // Store favorite email IDs
 let readEmails = new Set(); // Store read email IDs
 let filter = "all"; // Current filter (all, favorites, read, unread)
+const emailDetails = document.querySelector(".email-details");
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadPersistedData(); // Load saved favorites and read emails
   loadEmails(currentPage);
+  emailDetails.style.display = "none";
 
   // Pagination controls
   document.getElementById("nextPage").addEventListener("click", () => {
@@ -71,16 +74,23 @@ function renderEmailList() {
     emailInfo.innerHTML = `
       <p>From: <strong>${email.from.name} ${email.from.email}</strong></p>
       <p>Subject: <strong>${email.subject}</strong></p>
-      <p>${email.short_description}</p>
+      <p>${email.short_description} ...</p>
       <small>${formatDateTime(email.date)}</small>
-      <small id="favorite-text">${favoriteEmails.has(email.id) ? "Favorite" : ""}</small>
+      <small id="favorite-text">${
+        favoriteEmails.has(email.id) ? "Favorite" : ""
+      }</small>
     `;
 
     li.appendChild(avatar);
     li.appendChild(emailInfo);
 
     li.addEventListener("click", () => {
-      loadEmailBody(email.id, email.date, email.subject);
+      loadEmailBody(
+        email.id,
+        email.from.name[0].toUpperCase(),
+        email.date,
+        email.subject
+      );
       markAsRead(email.id);
     });
     emailList.appendChild(li);
@@ -121,23 +131,33 @@ function formatDateTime(timestamp) {
   return `${day}/${month}/${year} ${formattedHours}:${minutes} ${ampm}`;
 }
 
-async function loadEmailBody(emailId, emailDate, emailSubject) {
+async function loadEmailBody(emailId, emailAvatar, emailDate, emailSubject) {
   try {
     const response = await fetch(`${apiBaseUrl}/?id=${emailId}`);
     const email = await response.json();
-    displayEmailBody(email, emailId, emailDate, emailSubject);
+    displayEmailBody(email, emailId, emailAvatar, emailDate, emailSubject);
   } catch (error) {
     console.error("Error fetching email body:", error);
   }
 }
 
-function displayEmailBody(email, emailId, emailDate, subject) {
+function displayEmailBody(
+  email,
+  emailId,
+  emailAvatarLetter,
+  emailDate,
+  subject
+) {
+  const emailView = document.querySelector(".email-view");
+  const emailList = document.querySelector(".email-list"); // Select the email-view container
   const emailSubject = document.getElementById("emailSubject");
+  const emailAvatar = document.getElementById("email-avatar");
   const emailContent = document.getElementById("emailContent");
   const emailDateTime = document.getElementById("emailDateTime");
   const markFavoriteButton = document.getElementById("markFavorite");
 
-  emailSubject.textContent = `Subject: ${subject}`;
+  emailAvatar.textContent = emailAvatarLetter;
+  emailSubject.textContent = `${subject}`;
   emailContent.innerHTML = email.body; // Render HTML content
   emailDateTime.textContent = formatDateTime(emailDate);
 
@@ -149,6 +169,11 @@ function displayEmailBody(email, emailId, emailDate, subject) {
 
   // Toggle favorite on button click
   markFavoriteButton.onclick = () => toggleFavorite(emailId);
+
+  // Set email-view container to flex to make it visible
+  emailView.style.display = "flex";
+  emailList.style.width = "40%";
+  emailDetails.style.display = "flex";
 }
 
 function toggleFavorite(emailId) {
@@ -162,10 +187,29 @@ function toggleFavorite(emailId) {
     markFavoriteButton.textContent = "Unmark Favorite";
   }
 
+  // Save favorite emails to localStorage
+  localStorage.setItem("favoriteEmails", JSON.stringify([...favoriteEmails]));
+
   renderEmailList();
 }
 
 function markAsRead(emailId) {
   readEmails.add(emailId); // Mark email as read
+
+  // Save read emails to localStorage
+  localStorage.setItem("readEmails", JSON.stringify([...readEmails]));
+
   renderEmailList(); // Re-render to apply read styles
+}
+
+function loadPersistedData() {
+  const storedFavorites = localStorage.getItem("favoriteEmails");
+  const storedReadEmails = localStorage.getItem("readEmails");
+
+  if (storedFavorites) {
+    favoriteEmails = new Set(JSON.parse(storedFavorites));
+  }
+  if (storedReadEmails) {
+    readEmails = new Set(JSON.parse(storedReadEmails));
+  }
 }
