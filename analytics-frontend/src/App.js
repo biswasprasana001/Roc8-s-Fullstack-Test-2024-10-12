@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+import Chart from "./components/Chart";
 import ChartPage from "./components/ChartShare";
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
@@ -18,7 +19,7 @@ const App = () => {
           path="/"
           element={
             <ProtectedRoute>
-              <ChartPage />
+              <Chart />
             </ProtectedRoute>
           }
         />
